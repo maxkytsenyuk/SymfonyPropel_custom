@@ -10,6 +10,9 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Cookie;
 
 class LoginController extends Controller
 {
@@ -18,6 +21,7 @@ class LoginController extends Controller
      */
     public function loginAction(Request $request)
     {
+
         if ($request->getMethod() == 'POST') {
 
             $user_request = $request->request->get('u_name');
@@ -28,8 +32,19 @@ class LoginController extends Controller
 
           if($checkuser->count()==1) {
 
-              var_dump(md5($password_request . $checkuser[0]->getSalt()), $checkuser[0]->getPassword());
+
               if (md5($password_request . $checkuser[0]->getSalt()) == $checkuser[0]->getPassword()) {
+
+                  $session = $request->getSession();
+
+                  $response = new Response();
+
+                  $token = uniqid(mt_rand(), true);
+                  $session->set('token_id', $token);
+
+                  $response->headers->setCookie(new Cookie('token_id', $token));
+                  $response->send();
+
                   return $this->redirecttoRoute('playerslist');
 
               }
@@ -47,24 +62,19 @@ class LoginController extends Controller
 
         }
 
-        /*if (TRUE === $this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
-            return $this->redirectToRoute('playerslist');
-        }*/
-
-        //$user= new Users();
-        /*$token = new UsernamePasswordToken($user->getUsername(),$user->getPassword(),"main",$user->getRoles());
-        $this->get('security.token_storage')->setToken($token);
-        $this->get('session')->set('_security_secured_area', serialize($token));*/
-
-
         return $this->render('authenticationAuthBundle::login.html.twig');
     }
 
     /**
      * @Route("/logout", name="logout")
      */
-    public function logoutAction(){
+    public function logoutAction(Request $request){
 
+        $session = $request->getSession();
+
+        $session->remove('token_id');
+
+        //$session->clear();
         return $this->redirectToRoute('login');
     }
     /**
@@ -73,13 +83,17 @@ class LoginController extends Controller
     public function addUser(){
 
         $user= new Users();
+
         $user->setUsername('max');
+
         $user->setEmail('max.ololo@mail.com');
-        //$encoder = $this->container->get('security.password_encoder');
+
         $salt = uniqid(mt_rand(), true);
+
         $hash = md5(12345678);
+
         $saltedHash = md5($hash . $salt);
-        //$password = $encoder->encodePassword($user,'ololo123');
+
         $user->setPassword($saltedHash);
         $user->setSalt($salt);
         $user->save();
