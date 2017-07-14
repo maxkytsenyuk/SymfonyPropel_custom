@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('bundles/css/styles.css') }}">
+{% endblock %}
+{% block body %}
+    <a href="{{ path('logout') }}" class="btn btn-danger">LOGOUT</a>
+    <h2>Table from database</h2>
+    <p>Displaying a table:</p>
+    <div class="table-container">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Surname</th>
+            <th>Name</th>
+            <th>Team</th>
+            <th>Age</th>
+        </tr>
+        </thead>
+        <tbody>
+            {% for player in players %}
+                <tr>
+                    <td>{{player.surname}}</td>
+                    <td>{{ player.name}}</td>
+                    <td><b>{{player.team}}</td>
+                    <td>{{ player.age}}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock%}

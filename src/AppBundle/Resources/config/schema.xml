@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<database
+        name="default"
+        namespace="AppBundle\Model"
+        defaultIdMethod="native">
+
+    <table name="players">
+        <column
+                name="id"
+                type="integer"
+                required="true"
+                primaryKey="true"
+                autoIncrement="true" />
+
+        <column
+                name="surname"
+                type="varchar"
+                size="100" />
+
+        <column
+                name="name"
+                type="varchar"
+                size="100" />
+
+        <column
+                name="team"
+                type="varchar"
+                size="100" />
+
+        <column
+                name="age"
+                type="integer" />
+
+    </table>
+</database>

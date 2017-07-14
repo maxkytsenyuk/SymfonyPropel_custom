@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<database
+        name="default"
+        namespace="authentication\AuthBundle\Model"
+        defaultIdMethod="native">
+
+    <table name="users">
+        <column
+                name="id"
+                type="integer"
+                required="true"
+                primaryKey="true"
+                autoIncrement="true" />
+
+        <column
+                name="username"
+                type="varchar"
+                size="255" />
+
+        <column
+                name="email"
+                type="varchar"
+                size="255" />
+
+        <column
+                name="password"
+                type="varchar"
+                size="255" />
+
+
+        <column
+                name="salt"
+                type="varchar"
+                size="255" />
+
+    </table>
+</database>
